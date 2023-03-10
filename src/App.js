@@ -1,9 +1,11 @@
 import { useState } from "react";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
+import EditTodo from "./components/EditTodo";
 
 function App(todo) {
   const [todos, setTodos] = useState([]);
+  const [forEditVal, setForEditVal] = useState(null);
 
   console.log(todos);
 
@@ -16,10 +18,31 @@ function App(todo) {
     setTodos(filtered);
   }
 
+  function editTodo(editedTodo) {
+    const newArr = todos.map((item) => {
+      if (item.id === editedTodo.id) {
+        return editedTodo;
+      }
+      return item;
+    });
+    setTodos(newArr);
+  }
+
   return (
     <div>
       <AddTodo addTodo={addTodo} />
-      <TodoList todos={todos} deleteTodo={deleteTodo} />
+      {forEditVal ? (
+        <EditTodo
+          setForEditVal={setForEditVal}
+          editTodo={editTodo}
+          forEditVal={forEditVal}
+        />
+      ) : null}
+      <TodoList
+        setForEditVal={setForEditVal}
+        todos={todos}
+        deleteTodo={deleteTodo}
+      />
     </div>
   );
 }
